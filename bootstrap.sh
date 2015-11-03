@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 MYSQL_PWD='root'
-
+APACHE_CONF_PATH='/etc/apache2/sites-enabled/000-default.conf'
+WEBPATH='MyWebsite/'
 # Setting up configuration
 # MYSQL
 debconf-set-selections <<< "mysql-server-5.5 mysql-server/root_password password $MYSQL_PWD"
@@ -12,6 +13,9 @@ apt-get update
 # Install Apache 2.4 PHP5 Mysql Phpunit Git
 apt-get install -y apache2 php5 php5-mysql php5-curl php5-mcrypt php5-xsl php5-xdebug mysql-server-5.5 phpunit git git-extras
 php5enmod mcrypt
+
+sed -i "s#DocumentRoot /var/www/html#DocumentRoot /var/www/html/$WEBPATH#"  $APACHE_CONF_PATH
+
 
 # php.ini - date.timezone = "Europe/London"
 find /etc/php5/ -type f -iname 'php.ini' | xargs -n1 -i@ sh -c \
